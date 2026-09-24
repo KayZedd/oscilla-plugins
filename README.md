@@ -1,6 +1,6 @@
 # Oscilla plugins
 
-Plugins for [Oscilla](https://github.com/KayZedd/ytmd) (soon Oscilla), the
+Plugins for [Oscilla](https://github.com/KayZedd/Oscilla) (formerly YTMD), the
 desktop client for YouTube Music, and the official signed registry Oscilla
 installs them from.
 
@@ -23,7 +23,7 @@ and key.
 | `app.ytmd.sponsorblock` | Skips intros, outros and other non-music parts using the SponsorBlock database | `player:read`, `player:control`, `network` (`sponsor.ajay.app`) |
 
 The plugin API itself (manifest, permissions, the `ytmd` object) is
-documented in Oscilla's [`docs/PLUGIN_API.md`](https://github.com/KayZedd/ytmd/blob/main/docs/PLUGIN_API.md).
+documented in Oscilla's [`docs/PLUGIN_API.md`](https://github.com/KayZedd/Oscilla/blob/main/docs/PLUGIN_API.md).
 
 ## Layout
 
