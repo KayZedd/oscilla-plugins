@@ -1,0 +1,13 @@
+{
+  "id": "app.ytmd.adblock",
+  "name": "Ad blocker",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "description": "Removes ad scheduling data from YouTube Music's responses, and mutes, hides and skips anything that slips through. Never touches playback timing.",
+  "author": "YTMD",
+  "homepage": "https://github.com/KayZedd/oscilla-plugins",
+  "matches": ["https://music.youtube.com/*"],
+  "runAt": "document-start",
+  "permissions": ["player:read", "page", "ui"],
+  "entry": "main.js"
+}

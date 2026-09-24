@@ -1,0 +1,10 @@
+/* Declarative rules on YouTube Music's own custom properties and
+   selectors only: never write style properties on YTM's elements from JS. */
+html {
+  --yt-spec-call-to-action: var(--example-accent, #ff0033) !important;
+}
+#progress-bar,
+ytmusic-player-bar tp-yt-paper-slider {
+  --paper-slider-active-color: var(--example-accent, #ff0033) !important;
+  --paper-slider-knob-color: var(--example-accent, #ff0033) !important;
+}

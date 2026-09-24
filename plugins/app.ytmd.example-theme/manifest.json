@@ -1,0 +1,27 @@
+{
+  "id": "app.ytmd.example-theme",
+  "name": "Example theme",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "description": "The smallest useful plugin: tints YouTube Music's progress bar and buttons with an accent you pick.",
+  "author": "YTMD",
+  "homepage": "https://github.com/KayZedd/oscilla-plugins",
+  "matches": ["https://music.youtube.com/*"],
+  "runAt": "document-idle",
+  "permissions": ["ui"],
+  "entry": "main.js",
+  "styles": ["theme.css"],
+  "settings": [
+    {
+      "key": "accent",
+      "type": "select",
+      "label": { "en": "Accent color", "pl": "Kolor akcentu" },
+      "default": "red",
+      "options": [
+        { "value": "red", "label": { "en": "YouTube red", "pl": "Czerwony YouTube" } },
+        { "value": "teal", "label": { "en": "Teal", "pl": "Morski" } },
+        { "value": "gold", "label": { "en": "Gold", "pl": "Złoty" } }
+      ]
+    }
+  ]
+}

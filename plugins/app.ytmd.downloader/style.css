@@ -1,0 +1,31 @@
+/* A 40px round icon button like YouTube Music's own player-bar buttons,
+   with a ring that fills while a song is being saved. */
+.ytmd-dl-button {
+  --ytmd-dl-progress: 0;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0 4px;
+  padding: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--yt-sys-color-baseline--text-primary, #fff);
+  cursor: pointer;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ytmd-dl-button:hover { background: rgba(255, 255, 255, 0.1); }
+.ytmd-dl-button:focus-visible { outline: 2px solid rgba(255, 255, 255, 0.7); outline-offset: 1px; }
+.ytmd-dl-button svg { width: 24px; height: 24px; fill: currentColor; }
+.ytmd-dl-button[data-state='busy']::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: conic-gradient(var(--ytmd-accent, #fff) calc(var(--ytmd-dl-progress) * 1%), rgba(255, 255, 255, 0.15) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+}

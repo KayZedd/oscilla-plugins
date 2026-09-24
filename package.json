@@ -1,0 +1,9 @@
+{
+  "name": "oscilla-plugins",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "build": "bun scripts/build-index.ts"
+  }
+}

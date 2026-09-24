@@ -1,0 +1,59 @@
+# On a tag: build every plugin archive, hash it, write index.json, sign it
+# with the registry key (minisign, a key of its own: never YTMD's updater
+# key), and publish dist/ on GitHub Pages. YTMD users add
+#   https://<owner>.github.io/<repo>/index.json
+# together with the public key from README.md.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+      - run: bun test
+      - name: build archives and index
+        env:
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+        # Pages hosts are lower-case; YTMD has this exact address built in.
+        run: BASE_URL="https://${OWNER,,}.github.io/${REPO}" bun scripts/build-index.ts
+      - name: sign index.json
+        env:
+          MINISIGN_SECRET_KEY: ${{ secrets.MINISIGN_SECRET_KEY }}
+          MINISIGN_PASSWORD: ${{ secrets.MINISIGN_PASSWORD }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y minisign
+          umask 077
+          printf '%s\n' "$MINISIGN_SECRET_KEY" > "$RUNNER_TEMP/registry.key"
+          printf '%s\n' "$MINISIGN_PASSWORD" | minisign -S -s "$RUNNER_TEMP/registry.key" -m dist/index.json -t "oscilla-plugins ${{ github.ref_name }}"
+          rm -f "$RUNNER_TEMP/registry.key"
+          minisign -V -p minisign.pub -m dist/index.json
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

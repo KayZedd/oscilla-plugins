@@ -1,0 +1,21 @@
+{
+  "id": "app.ytmd.sponsorblock",
+  "name": "SponsorBlock",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "description": "Skips non-music parts of music videos (intros, outros, sponsor segments) using the community SponsorBlock database.",
+  "author": "YTMD",
+  "homepage": "https://github.com/KayZedd/oscilla-plugins",
+  "matches": ["https://music.youtube.com/*"],
+  "runAt": "document-idle",
+  "permissions": ["player:read", "player:control", "network"],
+  "hosts": ["sponsor.ajay.app"],
+  "entry": "main.js",
+  "settings": [
+    { "key": "music_offtopic", "type": "boolean", "label": { "en": "Skip non-music parts", "pl": "Pomijaj fragmenty bez muzyki" }, "default": true },
+    { "key": "intro", "type": "boolean", "label": { "en": "Skip intros", "pl": "Pomijaj intro" }, "default": true },
+    { "key": "outro", "type": "boolean", "label": { "en": "Skip outros", "pl": "Pomijaj outro" }, "default": true },
+    { "key": "sponsor", "type": "boolean", "label": { "en": "Skip sponsor segments", "pl": "Pomijaj reklamy sponsorów" }, "default": true },
+    { "key": "selfpromo", "type": "boolean", "label": { "en": "Skip self-promotion", "pl": "Pomijaj autopromocję" }, "default": true }
+  ]
+}
