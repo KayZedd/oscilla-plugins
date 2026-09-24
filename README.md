@@ -1,17 +1,17 @@
 # Oscilla plugins
 
-Plugins for [YTMD](https://github.com/KayZedd/ytmd) (soon Oscilla), the
-desktop client for YouTube Music, and the official signed registry YTMD
+Plugins for [Oscilla](https://github.com/KayZedd/ytmd) (soon Oscilla), the
+desktop client for YouTube Music, and the official signed registry Oscilla
 installs them from.
 
 This folder is meant to be pushed as its own repository,
-`KayZedd/oscilla-plugins`. YTMD has this registry built in:
+`KayZedd/oscilla-plugins`. Oscilla has this registry built in:
 
 - index: `https://kayzedd.github.io/oscilla-plugins/index.json`
 - public key (also in `minisign.pub`, key id `2254F07B14D10D3E`):
   `RWQ+DdEUe/BUIiUnj3ovEvBOs/mbG7mVy+1yR0/0VqkAAKX/36+pTw34`
 
-YTMD refuses anything that isn't signed with that key. Users can add other
+Oscilla refuses anything that isn't signed with that key. Users can add other
 registries in **Settings → Plugins → Registries** with their own address
 and key.
 
@@ -23,7 +23,7 @@ and key.
 | `app.ytmd.sponsorblock` | Skips intros, outros and other non-music parts using the SponsorBlock database | `player:read`, `player:control`, `network` (`sponsor.ajay.app`) |
 
 The plugin API itself (manifest, permissions, the `ytmd` object) is
-documented in YTMD's [`docs/PLUGIN_API.md`](https://github.com/KayZedd/ytmd/blob/main/docs/PLUGIN_API.md).
+documented in Oscilla's [`docs/PLUGIN_API.md`](https://github.com/KayZedd/ytmd/blob/main/docs/PLUGIN_API.md).
 
 ## Layout
 
@@ -62,14 +62,14 @@ The folder name must be the plugin's `id`.
 ```
 
 - `id`: reverse-DNS, lower case, also the folder name. Never change it.
-- `version`: semver. YTMD installs updates automatically when the new
+- `version`: semver. Oscilla installs updates automatically when the new
   version asks for **no** new permissions; otherwise the user is asked.
 - `apiVersion`: `1`.
 - `permissions`: any of `player:read`, `player:control`, `page`, `storage`,
   `network`, `ui`, `media:save`. `network` needs `hosts` (plain host names, https only).
 - `runAt`: `document-start` (before YouTube Music's own scripts, e.g. to
   wrap `fetch`) or `document-idle` (default).
-- `settings`: rendered in YTMD's Settings; types `boolean`, `number`
+- `settings`: rendered in Oscilla's Settings; types `boolean`, `number`
   (`min`/`max`), `string`, `select` (`options`). Labels are a string or
   `{ "en": ..., "pl": ... }`.
 
@@ -88,10 +88,10 @@ The folder name must be the plugin's `id`.
 
 ## Signing key
 
-The registry has its own minisign key, separate from YTMD's updater key.
-The public half is `minisign.pub` and is built into YTMD
+The registry has its own minisign key, separate from Oscilla's updater key.
+The public half is `minisign.pub` and is built into Oscilla
 (`src-tauri/src/plugins/registry.rs`, `OFFICIAL_KEY`); changing it means
-shipping a YTMD update first.
+shipping an Oscilla update first.
 
 Once, when creating the repository:
 
@@ -101,7 +101,7 @@ Once, when creating the repository:
 - Enable GitHub Pages with "GitHub Actions" as the source.
 
 A lost or leaked secret key: generate a new pair
-(`minisign -G -p minisign.pub -s registry.key`), release YTMD with the new
+(`minisign -G -p minisign.pub -s registry.key`), release Oscilla with the new
 `OFFICIAL_KEY`, then re-sign the registry with it.
 
 ## What the registry publishes
@@ -110,5 +110,5 @@ A lost or leaked secret key: generate a new pair
 `apiVersion`, `description`, `author`, `permissions`, `url` of its
 `.tar.gz`, and the archive's `sha256`. `index.json.minisig` signs the whole
 index, so the checksums, and through them every archive, are covered by
-the registry key. YTMD additionally checks that each archive's manifest
+the registry key. Oscilla additionally checks that each archive's manifest
 matches its index entry (id, version, permissions) before installing it.

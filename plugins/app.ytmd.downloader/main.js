@@ -1,8 +1,8 @@
-// Downloader for YTMD (plugin API 1): a player-bar button that saves the
-// current song with `ytmd.media.save` (the media:save permission). YTMD
+// Downloader for Oscilla (plugin API 1): a player-bar button that saves the
+// current song with `ytmd.media.save` (the media:save permission). Oscilla
 // runs yt-dlp with a fixed command line into the folder the user chose in
 // Settings → Plugins; this plugin only says which song and which format.
-// When yt-dlp or ffmpeg is missing it offers to install them: YTMD asks the
+// When yt-dlp or ffmpeg is missing it offers to install them: Oscilla asks the
 // user in its own dialog, downloads them from their GitHub releases and
 // checks their checksums; then the song is saved.
 
@@ -26,7 +26,7 @@ var TEXT = {
     installingFinish: 'Finishing the install…',
     installed: 'yt-dlp and ffmpeg are ready',
     installFailed: 'Couldn’t install yt-dlp and ffmpeg. Check your connection and try again.',
-    unsupported: 'YTMD can’t install yt-dlp and ffmpeg on this system; install them yourself.',
+    unsupported: 'Oscilla can’t install yt-dlp and ffmpeg on this system; install them yourself.',
     busy: 'Too many songs are being saved. Try again in a moment.',
     folder: 'Couldn’t write to the folder for saved songs (Settings → Plugins)'
   },
@@ -46,7 +46,7 @@ var TEXT = {
     installingFinish: 'Kończenie instalacji…',
     installed: 'yt-dlp i ffmpeg są gotowe',
     installFailed: 'Nie udało się zainstalować yt-dlp i ffmpeg. Sprawdź połączenie i spróbuj ponownie.',
-    unsupported: 'YTMD nie może zainstalować yt-dlp i ffmpeg w tym systemie; zainstaluj je samodzielnie.',
+    unsupported: 'Oscilla nie może zainstalować yt-dlp i ffmpeg w tym systemie; zainstaluj je samodzielnie.',
     busy: 'Zapisuje się zbyt wiele utworów. Spróbuj za chwilę.',
     folder: 'Nie można zapisać w folderze na zapisane utwory (Ustawienia → Wtyczki)'
   }
@@ -62,7 +62,7 @@ function text(lang, key, vars) {
   return s;
 }
 
-/** What to tell the user about an error key from YTMD
+/** What to tell the user about an error key from Oscilla
  * (`plugins.error.…`, optionally followed by `:detail`). */
 function errorMessage(lang, error) {
   var key = String(error || '');
@@ -150,7 +150,7 @@ function start(ytmd) {
     button.replaceChildren(icon(busy ? ICON_STOP : ICON_SAVE));
   }
 
-  // Installing yt-dlp/ffmpeg: YTMD asks the user first, in its own dialog.
+  // Installing yt-dlp/ffmpeg: Oscilla asks the user first, in its own dialog.
   var installing = false;
   ytmd.media.onToolsProgress(function (p) {
     if (!installing || p.state === 'done' || p.state === 'failed' || p.state === 'declined') return;

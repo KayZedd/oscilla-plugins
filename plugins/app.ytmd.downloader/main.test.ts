@@ -27,7 +27,7 @@ describe('Downloader: messages', () => {
     expect(text('de', 'save')).toBe('Save this song');
   });
 
-  test('explains the errors YTMD reports', () => {
+  test('explains the errors Oscilla reports', () => {
     expect(errorMessage('en', 'plugins.error.ytdlpMissing')).toBe('Saving songs needs yt-dlp and ffmpeg.');
     expect(errorMessage('pl', 'plugins.error.ffmpegMissing')).toBe('Do zapisywania utworów potrzebny jest ffmpeg.');
     expect(errorMessage('pl', 'plugins.error.busy')).toContain('Spróbuj za chwilę');

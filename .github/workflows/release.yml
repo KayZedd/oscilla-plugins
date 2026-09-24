@@ -1,6 +1,6 @@
 # On a tag: build every plugin archive, hash it, write index.json, sign it
-# with the registry key (minisign, a key of its own: never YTMD's updater
-# key), and publish dist/ on GitHub Pages. YTMD users add
+# with the registry key (minisign, a key of its own: never Oscilla's updater
+# key), and publish dist/ on GitHub Pages. Oscilla users add
 #   https://<owner>.github.io/<repo>/index.json
 # together with the public key from README.md.
 name: Release
@@ -30,7 +30,7 @@ jobs:
         env:
           OWNER: ${{ github.repository_owner }}
           REPO: ${{ github.event.repository.name }}
-        # Pages hosts are lower-case; YTMD has this exact address built in.
+        # Pages hosts are lower-case; Oscilla has this exact address built in.
         run: BASE_URL="https://${OWNER,,}.github.io/${REPO}" bun scripts/build-index.ts
       - name: sign index.json
         env:

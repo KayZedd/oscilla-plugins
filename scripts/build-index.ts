@@ -1,11 +1,11 @@
 /**
- * Builds the registry YTMD reads (docs: README.md):
+ * Builds the registry Oscilla reads (docs: README.md):
  *
  *   dist/<id>-<version>.tar.gz   one archive per plugin in plugins/<id>/
  *   dist/index.json              id, version, apiVersion, permissions, url, sha256
  *
  * Signing (dist/index.json.minisig) is a separate step with the registry's
- * minisign key, done by CI (.github/workflows/release.yml). YTMD refuses an
+ * minisign key, done by CI (.github/workflows/release.yml). Oscilla refuses an
  * index whose signature doesn't check out with the key the user added, and
  * any archive whose SHA-256 differs from the signed index.
  *
@@ -38,7 +38,7 @@ interface Manifest {
   styles?: string[];
 }
 
-/** The checks YTMD makes before installing (plugins/manifest.rs), so a
+/** The checks Oscilla makes before installing (plugins/manifest.rs), so a
  * broken plugin fails here instead of on users' machines. */
 export function checkManifest(m: Manifest, dirName: string): string[] {
   const problems: string[] = [];

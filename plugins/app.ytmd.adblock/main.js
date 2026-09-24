@@ -1,4 +1,4 @@
-// Ad blocker for YTMD (plugin API 1). Moved out of the YTMD core as is.
+// Ad blocker for Oscilla (plugin API 1). Moved out of the Oscilla core as is.
 //
 // 1. Response pruning (the real fix): strips ad-scheduling fields from
 //    YouTube's own API responses before the page reads them, so the player

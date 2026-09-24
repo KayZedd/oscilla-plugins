@@ -1,4 +1,4 @@
-// SponsorBlock for YTMD (plugin API 1): fetches segments for each song from
+// SponsorBlock for Oscilla (plugin API 1): fetches segments for each song from
 // sponsor.ajay.app (the only host its manifest allows) and seeks past each
 // one once. Stands down while this app follows someone else's playback
 // (a Listen Together guest).
