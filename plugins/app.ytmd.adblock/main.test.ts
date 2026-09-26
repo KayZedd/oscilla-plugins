@@ -10,8 +10,67 @@ const {
   pruneAdFields,
   isAdResponseUrl,
   AD_RESPONSE_ENDPOINTS,
-  BANNER_SELECTOR
+  BANNER_SELECTOR,
+  addStyleWhenRooted
 } = require('./main.js');
+
+// Regression: at document start there is no <html> yet, and Oscilla up to
+// 0.3.0 threw adding the style then, until the plugin was switched off.
+describe('addStyleWhenRooted', () => {
+  const g = globalThis as unknown as Record<string, unknown>;
+  const observers: { cb: () => void; disconnected: boolean }[] = [];
+  g.MutationObserver = class {
+    rec: { cb: () => void; disconnected: boolean };
+    constructor(cb: () => void) {
+      this.rec = { cb, disconnected: false };
+      observers.push(this.rec);
+    }
+    observe() {}
+    disconnect() {
+      this.rec.disconnected = true;
+    }
+  };
+  const fakeYtmd = () => {
+    const added: string[] = [];
+    const removed: string[] = [];
+    return { added, removed, ui: { addStyle: (css: string) => (added.push(css), () => removed.push(css)) } };
+  };
+
+  test('adds right away once the document has a root', () => {
+    const ytmd = fakeYtmd();
+    const remove = addStyleWhenRooted(ytmd, { head: null, documentElement: {} }, 'a{}');
+    expect(ytmd.added).toEqual(['a{}']);
+    remove();
+    expect(ytmd.removed).toEqual(['a{}']);
+  });
+
+  test('before <html> exists, waits and adds it once', () => {
+    const ytmd = fakeYtmd();
+    const doc: { head: unknown; documentElement: unknown } = { head: null, documentElement: null };
+    const remove = addStyleWhenRooted(ytmd, doc, 'b{}'); // no throw
+    expect(ytmd.added).toEqual([]);
+    const observer = observers[observers.length - 1];
+    observer.cb();
+    expect(ytmd.added).toEqual([]);
+    doc.documentElement = {};
+    observer.cb();
+    expect(ytmd.added).toEqual(['b{}']);
+    expect(observer.disconnected).toBe(true);
+    remove();
+    expect(ytmd.removed).toEqual(['b{}']);
+  });
+
+  test('unloaded before <html> exists: never added', () => {
+    const ytmd = fakeYtmd();
+    const doc: { head: unknown; documentElement: unknown } = { head: null, documentElement: null };
+    const remove = addStyleWhenRooted(ytmd, doc, 'c{}');
+    const observer = observers[observers.length - 1];
+    remove();
+    doc.documentElement = {};
+    observer.cb();
+    expect(ytmd.added).toEqual([]);
+  });
+});
 
 describe('isAdShowingFromClassList', () => {
   test('detects ad-showing class', () => {

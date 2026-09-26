@@ -102,6 +102,28 @@ function shouldRunTickSafetyNet(nowMs, lastRunMs, intervalMs) {
   return nowMs - lastRunMs >= intervalMs;
 }
 
+// Adds `css` once the document has a root. This plugin runs at document
+// start, before <html> exists, and Oscilla up to 0.3.0 appended plugin
+// styles to `document.head || document.documentElement` right away: both
+// were null, the call threw, and after five starts the plugin was switched
+// off. Returns a remover that also cancels a style still waiting.
+function addStyleWhenRooted(ytmd, document, css) {
+  if (document.head || document.documentElement) return ytmd.ui.addStyle(css);
+  var remove = null;
+  var cancelled = false;
+  var observer = new MutationObserver(function () {
+    if (!document.head && !document.documentElement) return;
+    observer.disconnect();
+    if (!cancelled) remove = ytmd.ui.addStyle(css);
+  });
+  observer.observe(document, { childList: true });
+  return function () {
+    cancelled = true;
+    observer.disconnect();
+    if (remove) remove();
+  };
+}
+
 function start(ytmd, window, document) {
   var enabled = true;
   var muteState = { adWasShowing: false, preAdMuted: false };
@@ -156,7 +178,7 @@ function start(ytmd, window, document) {
     }
   });
 
-  var removeStyle = ytmd.ui.addStyle(AD_VIDEO_HIDE_STYLE + AD_CHROME_HIDE_STYLE);
+  var removeStyle = addStyleWhenRooted(ytmd, document, AD_VIDEO_HIDE_STYLE + AD_CHROME_HIDE_STYLE);
 
   function moviePlayer() {
     return document.getElementById('movie_player');
@@ -246,6 +268,7 @@ if (typeof module !== 'undefined') {
   module.exports = {
     AD_RESPONSE_ENDPOINTS: AD_RESPONSE_ENDPOINTS,
     AD_VIDEO_HIDE_STYLE: AD_VIDEO_HIDE_STYLE,
+    addStyleWhenRooted: addStyleWhenRooted,
     BANNER_SELECTOR: BANNER_SELECTOR,
     computeMuteSync: computeMuteSync,
     deleteNestedKey: deleteNestedKey,
